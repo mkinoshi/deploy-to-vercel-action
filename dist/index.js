@@ -16285,7 +16285,11 @@ const init = async () => {
         core.info(lsOutput);
         core.endGroup();
 	const deploy = async (commit) => {
-		let commandArguments = [ `${ VERCEL_PATH } --token=${ VERCEL_TOKEN } --debug -y` ]
+		let commandArguments = [`${ VERCEL_PATH }` ]
+
+		commandArguments.push(`--token=${ VERCEL_TOKEN }`)
+		commandarguments.push(`--debug`)
+		commandarguments.push(`-y`)
 
 		if (VERCEL_SCOPE) {
 			commandArguments.push(`--scope=${ VERCEL_SCOPE }`)
