@@ -16258,12 +16258,16 @@ const {
 	FORCE
 } = __nccwpck_require__(4570)
 
-const init = () => {
+const init = async () => {
 	core.info('Setting environment variables for Vercel CLI')
 	core.exportVariable('VERCEL_ORG_ID', VERCEL_ORG_ID)
 	core.exportVariable('VERCEL_PROJECT_ID', VERCEL_PROJECT_ID)
 
 	let deploymentUrl
+	
+	core.startGroup('Installing Vercel CLI');
+	await exec('npm', ['install', '-g', 'vercel'], {});
+	core.endGroup();
 
 	const deploy = async (commit) => {
 		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
@@ -16668,7 +16672,7 @@ const run = async () => {
 
 	try {
 		core.info(`Creating deployment with Vercel CLI`)
-		const vercel = Vercel.init()
+		const vercel = await Vercel.init()
 
 		const commit = ATTACH_COMMIT_METADATA ? await github.getCommit() : undefined
 		const deploymentUrl = await vercel.deploy(commit)
@@ -16810,6 +16814,7 @@ run()
 		core.error('ERROR')
 		core.setFailed(err.message)
 	})
+
 })();
 
 module.exports = __webpack_exports__;

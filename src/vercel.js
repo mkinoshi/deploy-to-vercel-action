@@ -19,12 +19,16 @@ const {
 	FORCE
 } = require('./config')
 
-const init = () => {
+const init = async () => {
 	core.info('Setting environment variables for Vercel CLI')
 	core.exportVariable('VERCEL_ORG_ID', VERCEL_ORG_ID)
 	core.exportVariable('VERCEL_PROJECT_ID', VERCEL_PROJECT_ID)
 
 	let deploymentUrl
+	
+	core.startGroup('Installing Vercel CLI');
+	await exec('npm', ['install', '-g', 'vercel'], {});
+	core.endGroup();
 
 	const deploy = async (commit) => {
 		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
