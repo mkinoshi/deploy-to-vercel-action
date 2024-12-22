@@ -15896,6 +15896,10 @@ const context = {
 		key: [ 'GH_PAT', 'GITHUB_TOKEN' ],
 		required: true
 	}),
+	VERCEL_PATH: parser.getInput({
+		key: 'VERCEL_PATH',
+		required: true
+	}),
 	VERCEL_TOKEN: parser.getInput({
 		key: 'VERCEL_TOKEN',
 		required: true
@@ -16243,6 +16247,7 @@ const { exec, removeSchema } = __nccwpck_require__(8505)
 
 const {
 	VERCEL_TOKEN,
+	VERCEL_PATH,
 	PRODUCTION,
 	VERCEL_SCOPE,
 	VERCEL_ORG_ID,
@@ -16266,7 +16271,7 @@ const init = async () => {
 	let deploymentUrl
 	
 	core.startGroup('Installing Vercel CLI');
-	await exec('npm', ['install', '-g', 'vercel@22.0.1'], WORKING_DIRECTORY);
+	await exec('npm', ['install', '-g', 'vercel'], WORKING_DIRECTORY);
 	core.endGroup();
 
 	// Log current working directory
@@ -16280,7 +16285,7 @@ const init = async () => {
         core.info(lsOutput);
         core.endGroup();
 	const deploy = async (commit) => {
-		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
+		let commandArguments = [ `${ VERCEL_PATH } --token=${ VERCEL_TOKEN } --debug -y` ]
 
 		if (VERCEL_SCOPE) {
 			commandArguments.push(`--scope=${ VERCEL_SCOPE }`)

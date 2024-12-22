@@ -4,6 +4,7 @@ const { exec, removeSchema } = require('./helpers')
 
 const {
 	VERCEL_TOKEN,
+	VERCEL_PATH,
 	PRODUCTION,
 	VERCEL_SCOPE,
 	VERCEL_ORG_ID,
@@ -27,7 +28,7 @@ const init = async () => {
 	let deploymentUrl
 	
 	core.startGroup('Installing Vercel CLI');
-	await exec('npm', ['install', '-g', 'vercel@22.0.1'], WORKING_DIRECTORY);
+	await exec('npm', ['install', '-g', 'vercel'], WORKING_DIRECTORY);
 	core.endGroup();
 
 	// Log current working directory
@@ -41,7 +42,7 @@ const init = async () => {
         core.info(lsOutput);
         core.endGroup();
 	const deploy = async (commit) => {
-		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
+		let commandArguments = [ `${ VERCEL_PATH } --token=${ VERCEL_TOKEN } --debug -y` ]
 
 		if (VERCEL_SCOPE) {
 			commandArguments.push(`--scope=${ VERCEL_SCOPE }`)
