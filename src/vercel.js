@@ -30,6 +30,16 @@ const init = async () => {
 	await exec('npm', ['install', '-g', 'vercel'], WORKING_DIRECTORY);
 	core.endGroup();
 
+	// Log current working directory
+        core.startGroup('Current Working Directory');
+        const { stdout: pwdOutput } = await executeCommand('pwd', [], options);
+        core.info(`Current working directory: ${pwdOutput.trim()}`);
+        
+        // Also list directory contents for debugging
+        const { stdout: lsOutput } = await executeCommand('ls', ['-la'], options);
+        core.info('Directory contents:');
+        core.info(lsOutput);
+        core.endGroup();
 	const deploy = async (commit) => {
 		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
 
