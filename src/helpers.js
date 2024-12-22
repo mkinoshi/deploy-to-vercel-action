@@ -3,13 +3,15 @@ const { spawn } = require('child_process')
 
 const execCmd = (command, args, cwd) => {
 	core.debug(`EXEC: "${ command } ${ args }" in ${ cwd || '.' }`)
+	console.log(`EXEC: "${ command } ${ args }" in ${ cwd || '.' }`)
 	return new Promise((resolve, reject) => {
-		const process = spawn(command, args, { cwd })
+		const process = spawn(command, args, { cwd, shell: true })
 		let stdout = ''
 		let stderr = ''
 
 		process.stdout.on('data', (data) => {
 			core.debug(data.toString())
+			console.log(data.toString())
 			if (data !== undefined && data.length > 0) {
 				stdout += data
 			}
@@ -17,6 +19,7 @@ const execCmd = (command, args, cwd) => {
 
 		process.stderr.on('data', (data) => {
 			core.debug(data.toString())
+			console.log(data.toString())
 			if (data !== undefined && data.length > 0) {
 				stderr += data
 			}

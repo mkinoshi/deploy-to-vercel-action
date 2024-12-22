@@ -70,9 +70,8 @@ const init = () => {
 			})
 		}
 		
-		try  {
 		core.info('Starting deploy with Vercel CLI')
-		const output = await executeVercelCommand(commandArguments, WORKING_DIRECTORY);
+		const output = await exec('vercel', commandArguments, WORKING_DIRECTORY)
 		const parsed = output.match(/(?<=https?:\/\/)(.*)/g)[0]
 
 		if (!parsed) throw new Error('Could not parse deploymentUrl')
@@ -80,23 +79,6 @@ const init = () => {
 		deploymentUrl = parsed
 
 		return deploymentUrl
-		} catch (error) {
-			console.error('Deployment failed:');
-        console.error('Command:', error.cmd);
-        console.error('Exit code:', error.code);
-        console.error('Working directory:', error.workingDirectory);
-        console.error('Error output:', error.stderr);
-        console.error('Standard output:', error.stdout);
-        
-        // The error event provides system-level errors
-        if (error.code === 'ENOENT') {
-            console.error('Vercel CLI is not installed or not found in PATH');
-        } else if (error.code === 'EACCES') {
-            console.error('Permission denied when trying to execute Vercel CLI');
-        }
-        
-        throw error;
-		}
 	}
 
 	const assignAlias = async (aliasUrl) => {
