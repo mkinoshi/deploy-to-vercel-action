@@ -14,7 +14,7 @@
     "url": "git+https://github.com/betahuhn/deploy-to-vercel-action.git"
   },
   "keywords": [],
-  "author": "Maximilian Schiller <schiller@mxis.ch>",
+  "author": "Makoto Kinoshita",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/betahuhn/deploy-to-vercel-action/issues"

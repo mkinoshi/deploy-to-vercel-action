@@ -16263,7 +16263,7 @@ const init = () => {
 	let deploymentUrl
 
 	const deploy = async (commit) => {
-		let commandArguments = [ `--token=${ VERCEL_TOKEN }` ]
+		let commandArguments = [ `--token=${ VERCEL_TOKEN } --debug` ]
 
 		if (VERCEL_SCOPE) {
 			commandArguments.push(`--scope=${ VERCEL_SCOPE }`)
@@ -16353,6 +16353,7 @@ const init = () => {
 module.exports = {
 	init
 }
+
 
 /***/ }),
 
