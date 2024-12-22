@@ -16305,9 +16305,10 @@ const init = () => {
 				commandArguments = commandArguments.concat([ '--build-env', item ])
 			})
 		}
-
+		
+		try  {
 		core.info('Starting deploy with Vercel CLI')
-		const output = await exec('vercel', commandArguments, WORKING_DIRECTORY)
+		const output = await executeVercelCommand(commandArguments, WORKING_DIRECTORY);
 		const parsed = output.match(/(?<=https?:\/\/)(.*)/g)[0]
 
 		if (!parsed) throw new Error('Could not parse deploymentUrl')
@@ -16315,6 +16316,23 @@ const init = () => {
 		deploymentUrl = parsed
 
 		return deploymentUrl
+		} catch (error) {
+			console.error('Deployment failed:');
+        console.error('Command:', error.cmd);
+        console.error('Exit code:', error.code);
+        console.error('Working directory:', error.workingDirectory);
+        console.error('Error output:', error.stderr);
+        console.error('Standard output:', error.stdout);
+        
+        // The error event provides system-level errors
+        if (error.code === 'ENOENT') {
+            console.error('Vercel CLI is not installed or not found in PATH');
+        } else if (error.code === 'EACCES') {
+            console.error('Permission denied when trying to execute Vercel CLI');
+        }
+        
+        throw error;
+		}
 	}
 
 	const assignAlias = async (aliasUrl) => {
@@ -16349,6 +16367,58 @@ const init = () => {
 		getDeployment
 	}
 }
+
+function executeVercelCommand(commandArguments, workingDirectory) {
+    return new Promise((resolve, reject) => {
+        let stdout = '';
+        let stderr = '';
+
+        const child = spawn('vercel', commandArguments, {
+            cwd: workingDirectory,
+            shell: true
+        });
+
+        // Capture stdout
+        child.stdout.on('data', (data) => {
+            stdout += data.toString();
+        });
+
+        // Capture stderr
+        child.stderr.on('data', (data) => {
+            stderr += data.toString();
+        });
+
+        // Handle process errors (e.g., command not found, permission denied)
+        child.on('error', (error) => {
+            error.stdout = stdout;
+            error.stderr = stderr;
+            error.cmd = `vercel ${commandArguments.join(' ')}`;
+            error.workingDirectory = workingDirectory;
+            reject(error);
+        });
+
+        // Handle process completion
+        child.on('close', (code) => {
+            if (code !== 0) {
+                const error = new Error('Vercel CLI command failed');
+                error.code = code;
+                error.stdout = stdout;
+                error.stderr = stderr;
+                error.cmd = `vercel ${commandArguments.join(' ')}`;
+                error.workingDirectory = workingDirectory;
+                reject(error);
+            } else {
+                resolve({
+                    success: true,
+                    stdout,
+                    stderr,
+                    code
+                });
+            }
+        });
+    });
+}
+
 
 module.exports = {
 	init
