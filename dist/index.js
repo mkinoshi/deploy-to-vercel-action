@@ -16266,16 +16266,16 @@ const init = async () => {
 	let deploymentUrl
 	
 	core.startGroup('Installing Vercel CLI');
-	await exec('npm', ['install', '-g', 'vercel'], WORKING_DIRECTORY);
+	await exec('npm', ['install', '-g', 'vercel@22.0.1'], WORKING_DIRECTORY);
 	core.endGroup();
 
 	// Log current working directory
         core.startGroup('Current Working Directory');
-        const { stdout: pwdOutput } = await exec('pwd', [], WORKING_DIRECTORY);
-        core.info(`Current working directory: ${pwdOutput.trim()}`);
+        const pwdOutput = await exec('pwd', [], WORKING_DIRECTORY);
+        core.info(`Current working directory: ${pwdOutput}`);
         
         // Also list directory contents for debugging
-        const { stdout: lsOutput } = await exec('ls', ['-la'], WORKING_DIRECTORY);
+        const lsOutput = await exec('ls', ['-la'], WORKING_DIRECTORY);
         core.info('Directory contents:');
         core.info(lsOutput);
         core.endGroup();
