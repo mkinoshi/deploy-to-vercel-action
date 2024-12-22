@@ -16266,7 +16266,7 @@ const init = async () => {
 	let deploymentUrl
 	
 	core.startGroup('Installing Vercel CLI');
-	await exec('npm', ['install', '-g', 'vercel'], {});
+	await exec('npm', ['install', '-g', 'vercel'], WORKING_DIRECTORY);
 	core.endGroup();
 
 	const deploy = async (commit) => {
