@@ -16307,24 +16307,7 @@ const init = async () => {
 			commandArguments.push('--force')
 		}
 
-		if (commit) {
-			const metadata = [
-				`githubCommitAuthorName=${ commit.authorName }`,
-				`githubCommitAuthorLogin=${ commit.authorLogin }`,
-				`githubCommitMessage=${ TRIM_COMMIT_MESSAGE ? commit.commitMessage.split(/\r?\n/)[0] : commit.commitMessage }`,
-				`githubCommitOrg=${ USER }`,
-				`githubCommitRepo=${ REPOSITORY }`,
-				`githubCommitRef=${ REF }`,
-				`githubCommitSha=${ SHA }`,
-				`githubOrg=${ USER }`,
-				`githubRepo=${ REPOSITORY }`,
-				`githubDeployment=1`
-			]
-
-			metadata.forEach((item) => {
-				commandArguments = commandArguments.concat([ '--meta', item ])
-			})
-		}
+		if (commit && false) {}
 
 		if (BUILD_ENV) {
 			BUILD_ENV.forEach((item) => {

@@ -64,7 +64,7 @@ const init = async () => {
 			commandArguments.push('--force')
 		}
 
-		if (commit) {
+		if (commit && false) {
 			const metadata = [
 				`githubCommitAuthorName=${ commit.authorName }`,
 				`githubCommitAuthorLogin=${ commit.authorLogin }`,
