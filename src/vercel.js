@@ -32,11 +32,11 @@ const init = async () => {
 
 	// Log current working directory
         core.startGroup('Current Working Directory');
-        const { stdout: pwdOutput } = await executeCommand('pwd', [], options);
+        const { stdout: pwdOutput } = await exec('pwd', [], WORKING_DIRECTORY);
         core.info(`Current working directory: ${pwdOutput.trim()}`);
         
         // Also list directory contents for debugging
-        const { stdout: lsOutput } = await executeCommand('ls', ['-la'], options);
+        const { stdout: lsOutput } = await exec('ls', ['-la'], WORKING_DIRECTORY);
         core.info('Directory contents:');
         core.info(lsOutput);
         core.endGroup();
