@@ -46,7 +46,7 @@ const init = async () => {
 
 		commandArguments.push(`--token=${ VERCEL_TOKEN }`)
 		commandArguments.push(`--debug`)
-		commandArguments.push(`--yes`)
+		// commandArguments.push(`--yes`)
 
 		if (VERCEL_SCOPE) {
 			commandArguments.push(`--scope=${ VERCEL_SCOPE }`)
